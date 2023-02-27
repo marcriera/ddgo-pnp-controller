@@ -12,22 +12,36 @@ const USED_KEYS: [Key; 26] = [Key::KEY_0, Key::KEY_1, Key::KEY_2, Key::KEY_3, Ke
                             Key::KEY_SPACE, Key::KEY_ENTER, Key::KEY_A, Key::KEY_Z, Key::KEY_X, Key::KEY_S, Key::KEY_UP, Key::KEY_DOWN, Key::KEY_LEFT, Key::KEY_RIGHT];
 
 pub fn init() -> Result<[Device; 2]> {
-    let d1 = Device::open("/dev/input/event14")?;
-    let d2 = Device::open("/dev/input/event14")?;
+    let d1 = Device::open("/dev/input/event1")?;
+    let d2 = Device::open("/dev/input/event2")?;
     Ok([d1, d2])
 }
 
-pub fn get_state(dev: [Device; 2]) -> ControllerState {
-    let mut state: ControllerState = Default::default(); 
+pub fn get_state(state: &mut ControllerState, dev: &[Device; 2]) {
     for d in dev {
         if let Ok(key_vals) = d.get_key_state() {
             for key in USED_KEYS {
-                read_input(&mut state, key, key_vals.contains(key));
+                read_input(state, key, key_vals.contains(key));
             }
         }
     }
-    return state;
 }
+
+/* pub fn fetch_input(state: &mut ControllerState, dev: &mut [Device; 2]) {
+    for device in dev {
+        let evs = device.fetch_events();
+        match evs {
+            Ok(evs) => {
+                for event in evs {
+                    if event.event_type() == EventType::KEY {
+                        read_input(state, Key(event.code()), event.value() != 0);
+                    }
+                }
+            },
+            Err(_e) => (),
+        }
+    }
+} */
 
 fn read_input(controller: &mut ControllerState, key: Key, value: bool) {
     // Save input status to object for processing

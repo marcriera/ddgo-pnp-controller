@@ -3,8 +3,5 @@ name = "ddgo-pnp-controller"
 version = "0.1.0"
 edition = "2021"
 
-[package.metadata.cross.target.arm-unknown-linux-musleabi]
-pre-build = ["apt-get update && apt-get install -y python3"] 
-
 [dependencies]
 evdev = "0.12.1"
