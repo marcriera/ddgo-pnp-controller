@@ -12,4 +12,6 @@ pub struct ControllerState {
     pub button_down: bool,
     pub button_left: bool,
     pub button_right: bool,
+    pub lamp: bool,
+    pub rumble: bool,
 }

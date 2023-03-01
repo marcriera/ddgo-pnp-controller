@@ -21,27 +21,13 @@ pub fn get_state(state: &mut ControllerState, dev: &[Device; 2]) {
     for d in dev {
         if let Ok(key_vals) = d.get_key_state() {
             for key in USED_KEYS {
-                read_input(state, key, key_vals.contains(key));
+                if d.supported_keys().map_or(true, |k| k.contains(key)) {
+                    read_input(state, key, key_vals.contains(key));
+                }
             }
         }
     }
 }
-
-/* pub fn fetch_input(state: &mut ControllerState, dev: &mut [Device; 2]) {
-    for device in dev {
-        let evs = device.fetch_events();
-        match evs {
-            Ok(evs) => {
-                for event in evs {
-                    if event.event_type() == EventType::KEY {
-                        read_input(state, Key(event.code()), event.value() != 0);
-                    }
-                }
-            },
-            Err(_e) => (),
-        }
-    }
-} */
 
 fn read_input(controller: &mut ControllerState, key: Key, value: bool) {
     // Save input status to object for processing
@@ -80,16 +66,16 @@ pub fn set_lamp(status: bool) {
     if let Ok(mut out) = File::create("/sys/class/leds/led2/brightness") {
         out.write(if status {b"1"} else {b"0"}).ok();
     }
-    else {
+    /*else {
         println!("WARNING: Could not set door lamp status!")
-    }
+    }*/
 }
 
 pub fn set_rumble(status: bool) {
     if let Ok(mut out) = File::create("/sys/class/leds/led1/brightness") {
         out.write(if status {b"1"} else {b"0"}).ok();
     }
-    else {
+    /*else {
         println!("WARNING: Could not set rumble motor status!")
-    }
+    }*/
 }
