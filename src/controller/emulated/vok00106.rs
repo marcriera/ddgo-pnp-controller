@@ -1,4 +1,4 @@
-use crate::state::ControllerState;
+use crate::controller::physical::ControllerState;
 
 const POWER_NOTCHES: [&str; 6] = ["TSA50", "TSA55", "TSA65", "TSA75", "TSA85", "TSA95"];
 const BRAKE_NOTCHES: [&str; 10] = ["TSA50", "TSA45", "TSA35", "TSA25", "TSA15", "TSA05", "TSE99", "TSB40", "TSB30", "TSB20"];

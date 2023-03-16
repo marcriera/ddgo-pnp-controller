@@ -5,7 +5,23 @@ use std::io::Result;
 use evdev::Device;
 use evdev::Key;
 
-use crate::state::ControllerState;
+#[derive(Default)]
+pub struct ControllerState {
+    pub power: u8,
+    pub brake: u8,
+    pub button_select: bool,
+    pub button_start: bool,
+    pub button_a: bool,
+    pub button_b: bool,
+    pub button_c: bool,
+    pub button_d: bool,
+    pub button_up: bool,
+    pub button_down: bool,
+    pub button_left: bool,
+    pub button_right: bool,
+    pub lamp: bool,
+    pub rumble: bool,
+}
 
 const USED_KEYS: [Key; 26] = [Key::KEY_0, Key::KEY_1, Key::KEY_2, Key::KEY_3, Key::KEY_4, Key::KEY_5,
                             Key::KEY_B, Key::KEY_C, Key::KEY_D, Key::KEY_E, Key::KEY_F, Key::KEY_G, Key::KEY_H, Key::KEY_I, Key::KEY_J, Key::KEY_P,
