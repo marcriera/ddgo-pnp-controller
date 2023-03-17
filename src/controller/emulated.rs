@@ -63,7 +63,7 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
 fn init_gadget(device: &DeviceDescriptor, descriptors: &[u8], strings: &[u8]) {
     Command::new("modprobe").arg("g_ffs")
     .arg(String::from("bDeviceClass=")+&device.b_device_class.to_string())
-    .arg(String::from("bDeviceSubclass=")+&device.b_device_sub_class.to_string())
+    .arg(String::from("bDeviceSubClass=")+&device.b_device_sub_class.to_string())
     .arg(String::from("idVendor=")+&device.id_vendor.to_string())
     .arg(String::from("idProduct=")+&device.id_product.to_string())
     .arg(String::from("iManufacturer=")+device.i_manufacturer)
