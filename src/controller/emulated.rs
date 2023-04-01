@@ -6,12 +6,18 @@ use std::process::Command;
 use crate::controller::physical::ControllerState;
 mod dgoc44u;
 mod tcpp20009;
+mod tcpp20011;
 mod vok00106;
+
+const FFS_MOUNT: &str = "/tmp/ffs-mascon";
+const ENDPOINT0: &str = "/tmp/ffs-mascon/ep0";
+const ENDPOINT1: &str = "/tmp/ffs-mascon/ep1";
 
 #[derive(PartialEq)]
 pub enum ControllerModel {
     DGOC44U,
     TCPP20009,
+    TCPP20011,
     VOK00106,
 }
 
@@ -36,6 +42,11 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
         init_gadget(&tcpp20009::DEVICE_DESCRIPTOR, &tcpp20009::DESCRIPTORS, &tcpp20009::STRINGS);
         return Some(ControllerModel::TCPP20009);
     }
+    else if state.button_c {
+        println!("Selected controller TCPP-20011.");
+        init_gadget(&tcpp20011::DEVICE_DESCRIPTOR, &tcpp20011::DESCRIPTORS, &tcpp20011::STRINGS);
+        return Some(ControllerModel::TCPP20011);
+    }
     else if state.button_a {
         println!("Selected controller VOK-00106.");
         return Some(ControllerModel::VOK00106);
@@ -54,6 +65,9 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
         ControllerModel::TCPP20009 => {
             tcpp20009::update_gadget(state);
         }
+        ControllerModel::TCPP20011 => {
+            tcpp20011::update_gadget(state);
+        }
         ControllerModel::VOK00106 => {
             vok00106::update_gadget(state);
         }
@@ -70,18 +84,18 @@ fn init_gadget(device: &DeviceDescriptor, descriptors: &[u8], strings: &[u8]) {
     .arg(String::from("iProduct=")+device.i_product)
     .arg(String::from("iSerialNumber=")+device.i_serial_number)
     .output().ok();
-    Command::new("mkdir").args(["-p","/tmp/ffs-mascon"]).output().ok();
-    Command::new("mount").args(["-t","functionfs","mascon","/tmp/ffs-mascon"]).output().ok();
+    Command::new("mkdir").args(["-p",&FFS_MOUNT]).output().ok();
+    Command::new("mount").args(["-t","functionfs","mascon",&FFS_MOUNT]).output().ok();
 
     thread::spawn(move || {
-        if let Ok(mut ep0) = File::open("/tmp/ffs-mascon/ep0") {
-            let mut buffer = [0; 100];
+        if let Ok(mut ep0) = File::open(&ENDPOINT0) {
+            let mut buffer = [0; 4];
             loop {
                 ep0.read(&mut buffer).ok();
             }
         }
     });
-    if let Ok(mut ep0) = File::create("/tmp/ffs-mascon/ep0") {
+    if let Ok(mut ep0) = File::create(&ENDPOINT0) {
         ep0.write(descriptors).ok();
         println!("USB Gadget: Descriptors written to EP0");
         ep0.write(strings).ok();

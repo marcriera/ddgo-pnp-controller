@@ -10,18 +10,18 @@ pub const DESCRIPTORS: [u8; 32] = [0x01, 0x00, 0x00, 0x00, 0x20, 0x00, 0x00, 0x0
 0x07, 0x05, 0x81, 0x03, 0x08, 0x00, 0x14];
 pub const STRINGS: [u8; 16] = [0x02, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
 
-pub const DEVICE_DESCRIPTOR: DeviceDescriptor = DeviceDescriptor{b_device_class: 0xFF, b_device_sub_class: 0x4, id_vendor: 0x0AE4, id_product: 0x0004, i_manufacturer: "TAITO", i_product: "Densha de Go! Plug & Play (Type 2 mode)", i_serial_number: "TCPP20010"};
+pub const DEVICE_DESCRIPTOR: DeviceDescriptor = DeviceDescriptor{b_device_class: 0xFF, b_device_sub_class: 0x5, id_vendor: 0x0AE4, id_product: 0x0005, i_manufacturer: "TAITO", i_product: "Densha de Go! Plug & Play (Shinkansen)", i_serial_number: "TCPP20011"};
 
-const POWER_NOTCHES: [u8; 6] = [0x81, 0x6D, 0x54, 0x3F, 0x21, 0x00];
-const BRAKE_NOTCHES: [u8; 10] = [0x79, 0x8A, 0x94, 0x9A, 0xA2, 0xA8, 0xAF, 0xB2, 0xB5, 0xB9];
+const POWER_NOTCHES: [u8; 6] = [0x12, 0x36, 0x5A, 0x90, 0xC6, 0xFB];
+const BRAKE_NOTCHES: [u8; 10] = [0x1C, 0x38, 0x54, 0x70, 0x8B, 0xA7, 0xC3, 0xDF, 0xDF, 0xFB];
 
 bitflags! {
         struct Buttons: u8 {
             const NONE = 0;
-            const B = 1;
-            const A = 2;
-            const C = 4;
-            const D = 8;
+            const D = 1;
+            const C = 2;
+            const B = 4;
+            const A = 8;
             const SELECT = 16;
             const START = 32;
         }
@@ -53,7 +53,7 @@ pub fn update_gadget(state: &mut ControllerState) {
     if state.button_down & state.button_right { dpad = 0x3 }
 
     // Assemble data and send it to endpoint
-    let data = [0x1, brake, power, 0xFF, dpad, buttons.bits];
+    let data = [brake, power, 0xFF, dpad, buttons.bits, 0x0];
     if let Ok(mut file) = File::create(ENDPOINT1) {
         file.write(&data).ok();
     }

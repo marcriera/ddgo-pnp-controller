@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::{Write};
 use bitflags::bitflags;
 use crate::controller::physical::ControllerState;
-use crate::controller::emulated::DeviceDescriptor;
+use crate::controller::emulated::{DeviceDescriptor, ENDPOINT1};
 
 pub const DESCRIPTORS: [u8; 41] = [0x01, 0x00, 0x00, 0x00, 0x29, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 0x09, 0x04, 0x00, 0x00, 0x01, 0x03, 0x00, 0x00, 0x00,
@@ -52,4 +52,7 @@ pub fn update_gadget(state: &mut ControllerState) {
 
     // Assemble data and send it to gadget
     let data = [brake, power, 0, buttons.bits, 0, 0];
+    if let Ok(mut file) = File::create(ENDPOINT1) {
+        file.write(&data).ok();
+    }
 }
