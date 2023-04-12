@@ -9,7 +9,7 @@ use crate::controller::physical::ControllerState;
 mod dgoc44u;
 mod tcpp20009;
 mod tcpp20011;
-mod sotp031201_p5b7;
+mod sotp031201_p4b7;
 mod vok00106;
 
 const FFS_MOUNT: &str = "/tmp/ffs";
@@ -22,7 +22,7 @@ pub enum ControllerModel {
     DGOC44U,
     TCPP20009,
     TCPP20011,
-    SOTP031201P5B7,
+    SOTP031201P4B7,
     VOK00106,
 }
 
@@ -53,9 +53,9 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
         return Some(ControllerModel::TCPP20011);
     }
     else if state.button_c && state.power == 0 {
-        println!("Selected controller SOTP-031201 (P5/B7 mode).");
-        init_gadget(&sotp031201_p5b7::DEVICE_DESCRIPTOR, &sotp031201_p5b7::DESCRIPTORS, &sotp031201_p5b7::STRINGS);
-        return Some(ControllerModel::SOTP031201P5B7);
+        println!("Selected controller SOTP-031201 (P4/B7 mode).");
+        init_gadget(&sotp031201_p4b7::DEVICE_DESCRIPTOR, &sotp031201_p4b7::DESCRIPTORS, &sotp031201_p4b7::STRINGS);
+        return Some(ControllerModel::SOTP031201P4B7);
     }
 /*     else if state.button_a {
         println!("Selected controller VOK-00106.");
@@ -78,8 +78,8 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
         ControllerModel::TCPP20011 => {
             tcpp20011::update_gadget(state);
         }
-        ControllerModel::SOTP031201P5B7 => {
-            sotp031201_p5b7::update_gadget(state);
+        ControllerModel::SOTP031201P4B7 => {
+            sotp031201_p4b7::update_gadget(state);
         }
         ControllerModel::VOK00106 => {
             vok00106::update_gadget(state);
