@@ -10,6 +10,7 @@ mod dgoc44u;
 mod tcpp20009;
 mod tcpp20011;
 mod sotp031201_p4b7;
+mod sotp031201_p5b5;
 mod vok00106;
 
 const FFS_MOUNT: &str = "/tmp/ffs";
@@ -23,6 +24,7 @@ pub enum ControllerModel {
     TCPP20009,
     TCPP20011,
     SOTP031201P4B7,
+    SOTP031201P5B5,
     VOK00106,
 }
 
@@ -57,6 +59,11 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
         init_gadget(&sotp031201_p4b7::DEVICE_DESCRIPTOR, &sotp031201_p4b7::DESCRIPTORS, &sotp031201_p4b7::STRINGS);
         return Some(ControllerModel::SOTP031201P4B7);
     }
+    else if state.button_c && state.power == 2 {
+        println!("Selected controller SOTP-031201 (P5/B5 mode).");
+        init_gadget(&sotp031201_p5b5::DEVICE_DESCRIPTOR, &sotp031201_p5b5::DESCRIPTORS, &sotp031201_p5b5::STRINGS);
+        return Some(ControllerModel::SOTP031201P5B5);
+    }
 /*     else if state.button_a {
         println!("Selected controller VOK-00106.");
         return Some(ControllerModel::VOK00106);
@@ -80,6 +87,9 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
         }
         ControllerModel::SOTP031201P4B7 => {
             sotp031201_p4b7::update_gadget(state);
+        }
+        ControllerModel::SOTP031201P5B5 => {
+            sotp031201_p5b5::update_gadget(state);
         }
         ControllerModel::VOK00106 => {
             vok00106::update_gadget(state);
