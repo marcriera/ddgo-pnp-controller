@@ -20,7 +20,7 @@ const ENDPOINT0: &str = "/tmp/ffs/ep0";
 const ENDPOINT1: &str = "/tmp/ffs/ep1";
 const ANDROID_GADGET: &str = "/sys/class/android_usb/android0";
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Debug, Clone, Copy)]
 pub enum ControllerModel {
     DGOC44U,
     TCPP20009,
@@ -43,49 +43,55 @@ pub struct DeviceDescriptor {
 }
 
 pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
-    if state.button_right {
-        println!("Selected controller DGOC44-U.");
-        init_gadget(&dgoc44u::DEVICE_DESCRIPTOR, &dgoc44u::DESCRIPTORS, &dgoc44u::STRINGS);
-        return Some(ControllerModel::DGOC44U);
+    let model;
+    let model_name;
+    let descriptors: (&DeviceDescriptor, &[u8], &[u8]);
+    if !state.button_right {
+        model_name = "DGOC44-U";
+        model = ControllerModel::DGOC44U;
+        descriptors = (&dgoc44u::DEVICE_DESCRIPTOR, &dgoc44u::DESCRIPTORS, &dgoc44u::STRINGS);
     }
     else if state.button_d {
-        println!("Selected controller TCPP-20009.");
-        init_gadget(&tcpp20009::DEVICE_DESCRIPTOR, &tcpp20009::DESCRIPTORS, &tcpp20009::STRINGS);
-        return Some(ControllerModel::TCPP20009);
+        model_name = "TCPP-20009";
+        model = ControllerModel::TCPP20009;
+        descriptors = (&tcpp20009::DEVICE_DESCRIPTOR, &tcpp20009::DESCRIPTORS, &tcpp20009::STRINGS);
     }
     else if state.button_b {
-        println!("Selected controller TCPP-20011.");
-        init_gadget(&tcpp20011::DEVICE_DESCRIPTOR, &tcpp20011::DESCRIPTORS, &tcpp20011::STRINGS);
-        return Some(ControllerModel::TCPP20011);
+        model_name = "TCPP-20011";
+        model = ControllerModel::TCPP20011;
+        descriptors = (&tcpp20011::DEVICE_DESCRIPTOR, &tcpp20011::DESCRIPTORS, &tcpp20011::STRINGS);
     }
     else if state.button_c && state.power == 0 {
-        println!("Selected controller SOTP-031201 (P4/B7 mode).");
-        init_gadget(&sotp031201_p4b7::DEVICE_DESCRIPTOR, &sotp031201_p4b7::DESCRIPTORS, &sotp031201_p4b7::STRINGS);
-        return Some(ControllerModel::SOTP031201P4B7);
+        model_name = "SOTP-031201 (P4/B7 mode)";
+        model = ControllerModel::SOTP031201P4B7;
+        descriptors = (&sotp031201_p4b7::DEVICE_DESCRIPTOR, &sotp031201_p4b7::DESCRIPTORS, &sotp031201_p4b7::STRINGS);
     }
     else if state.button_c && state.power == 1 {
-        println!("Selected controller SOTP-031201 (P4/B2-B7 mode).");
-        init_gadget(&sotp031201_p4b2b7::DEVICE_DESCRIPTOR, &sotp031201_p4b2b7::DESCRIPTORS, &sotp031201_p4b2b7::STRINGS);
-        return Some(ControllerModel::SOTP031201P4B2B7);
+        model_name = "SOTP-031201 (P4/B2-B7 mode)";
+        model = ControllerModel::SOTP031201P4B2B7;
+        descriptors = (&sotp031201_p4b2b7::DEVICE_DESCRIPTOR, &sotp031201_p4b2b7::DESCRIPTORS, &sotp031201_p4b2b7::STRINGS);
     }
     else if state.button_c && state.power == 2 {
-        println!("Selected controller SOTP-031201 (P5/B5 mode).");
-        init_gadget(&sotp031201_p5b5::DEVICE_DESCRIPTOR, &sotp031201_p5b5::DESCRIPTORS, &sotp031201_p5b5::STRINGS);
-        return Some(ControllerModel::SOTP031201P5B5);
+        model_name = "SOTP-031201 (P5/B5 mode)";
+        model = ControllerModel::SOTP031201P5B5;
+        descriptors = (&sotp031201_p5b5::DEVICE_DESCRIPTOR, &sotp031201_p5b5::DESCRIPTORS, &sotp031201_p5b5::STRINGS);
     }
     else if state.button_c && state.power == 3 {
-        println!("Selected controller SOTP-031201 (P5/B7 mode).");
-        init_gadget(&sotp031201_p5b7::DEVICE_DESCRIPTOR, &sotp031201_p5b7::DESCRIPTORS, &sotp031201_p5b7::STRINGS);
-        return Some(ControllerModel::SOTP031201P5B7);
+        model_name = "SOTP-031201 (P5/B7 mode)";
+        model = ControllerModel::SOTP031201P5B7;
+        descriptors = (&sotp031201_p5b7::DEVICE_DESCRIPTOR, &sotp031201_p5b7::DESCRIPTORS, &sotp031201_p5b7::STRINGS);
     }
 /*     else if state.button_a {
-        println!("Selected controller VOK-00106.");
-        return Some(ControllerModel::VOK00106);
-    } */
+        model_name = "VOK-00106";
+        model = ControllerModel::VOK00106;
+    }  */
     else {
         println!("No controller selected.");
         return None;
     }
+    println!("Selected controller {}.", model_name);
+    init_gadget(&model, descriptors);
+    return Some(model);
 }
 
 pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
@@ -117,7 +123,32 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
     }
 }
 
-fn init_gadget(device: &DeviceDescriptor, descriptors: &[u8], strings: &[u8]) {
+pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
+    if data[1] == 6 {
+        let report;
+        match model {
+            ControllerModel::DGOC44U => {
+                report = Some(&dgoc44u::HID_REPORT_DESCRIPTOR);
+            }
+            _ => {
+                report = None;
+            }
+        }
+        match report {
+            Some(rep) => {
+                if let Ok(mut file) = File::create(ENDPOINT0) {
+                    file.write(rep).ok();
+                }
+            }
+            None => (),
+        }
+    }
+    else {
+        // Other control transfer, pass it to emulated controller loop
+    }
+}
+
+fn init_gadget(model: &ControllerModel, (device, descriptors, strings): (&DeviceDescriptor, &[u8], &[u8])) {
     // Init g_ffs kernel module
     Command::new("modprobe").arg("g_ffs")
     .arg(String::from("bDeviceClass=")+&device.b_device_class.to_string())
@@ -131,11 +162,19 @@ fn init_gadget(device: &DeviceDescriptor, descriptors: &[u8], strings: &[u8]) {
     Command::new("mkdir").args(["-p",&FFS_MOUNT]).output().ok();
     Command::new("mount").args(["-t","functionfs","ffs",&FFS_MOUNT]).output().ok();
 
+    let controller_model = model.clone();
+
     thread::spawn(move || {
         if let Ok(mut ep0) = File::open(&ENDPOINT0) {
-            let mut buffer = [0; 4];
+            let mut buffer = [0; 12];
             loop {
-                ep0.read(&mut buffer).ok();
+                if let Ok(_result) = ep0.read(&mut buffer) {
+                    if buffer[8] == 0x4 {
+                        // Control transfer received
+                        handle_ctrl_transfer(controller_model, &buffer[0..8]);
+                    }
+
+                }
             }
         }
     });
