@@ -18,25 +18,25 @@ const POWER_NOTCHES: [u8; 6] = [0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E];
 const BRAKE_NOTCHES: [u8; 10] = [0x09, 0x08, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x02, 0x01];
 
 bitflags! {
-        struct Buttons1: u8 {
-            const NONE = 0;
-            const S = 1;
-            const D = 2;
-            const A = 4;
-            const A2 = 8;
-            const B = 16;
-            const C = 32;
-        }
-        struct Buttons2: u8 {
-            const NONE = 0;
-            const START = 1;
-            const SELECT = 2;
-            const UP = 4;
-            const DOWN = 8;
-            const LEFT = 16;
-            const RIGHT = 32;
-        }
+    struct Buttons1: u8 {
+        const NONE = 0;
+        const S = 1;
+        const D = 2;
+        const A = 4;
+        const A2 = 8;
+        const B = 16;
+        const C = 32;
     }
+    struct Buttons2: u8 {
+        const NONE = 0;
+        const START = 1;
+        const SELECT = 2;
+        const UP = 4;
+        const DOWN = 8;
+        const LEFT = 16;
+        const RIGHT = 32;
+    }
+}
 
 pub fn update_gadget(state: &mut ControllerState) {
     // Calculate data for handles

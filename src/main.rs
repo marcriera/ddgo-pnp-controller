@@ -39,7 +39,7 @@ fn main() -> Result<()> {
                     set_rumble(controller_state.rumble);
 
                     // Wait between cycles
-                    sleep(Duration::from_millis(20));
+                    sleep(Duration::from_millis(5));
                 }
             }
             return Result::Ok(());
