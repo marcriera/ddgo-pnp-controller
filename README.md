@@ -22,13 +22,14 @@ Connect the Plug & Play to a PC or console using the data cable. Press one of th
 
 | Controller                              | Button combination    | Notes                                        |
 |-----------------------------------------|-----------------------|----------------------------------------------|
+| One handle controller (Nintendo Switch) | UP                    |                                              |
 | Two handle controller (PC)              | RIGHT                 | D-Pad is mapped to SELECT+ABCD               |
 | Two handle controller "Type 2" (PS2)    | D                     |                                              |
 | Shinkansen controller (PS2)             | B                     | Power notches are mapped to P2-P4-P7-P10-P13 |
 | Multi Train Controller (PS2) - P4/B7    | C + Power handle at 0 |                                              |
-| Multi Train Controller (PS2) - P4/B2-B6 | C + Power handle at 1 |                                              |
+| Multi Train Controller (PS2) - P4/B2-B6 | C + Power handle at 1 | Beta, currently undetected by game           |
 | Multi Train Controller (PS2) - P5/B5    | C + Power handle at 2 |                                              |
-| Multi Train Controller (PS2) - P5/B7    | C + Power handle at 3 |                                              |
+| Multi Train Controller (PS2) - P5/B7    | C + Power handle at 3 | Beta, currently undetected by game           |
 
 Hold the buttons until the controller vibrates to confirm selection. If no button is pressed, you can play with the Plug & Play as usual.
 
