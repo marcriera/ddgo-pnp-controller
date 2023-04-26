@@ -75,12 +75,15 @@ bitflags! {
         const B = 2;
         const A = 4;
         const X = 8;
+        const L = 16;
+        const R = 32;
         const ZL = 64;
     }
     struct Buttons2: u8 {
         const NONE = 0;
         const SELECT = 1;
         const START = 2;
+        const HOME = 16;
     }
 }
 
@@ -98,11 +101,14 @@ pub fn update_gadget(state: &mut ControllerState) {
     if state.button_c { buttons1.insert(Buttons1::A) }
     if state.button_d { buttons1.insert(Buttons1::X) }
     if state.brake == 9 { buttons1.insert(Buttons1::ZL) }
+    if state.button_select && state.button_left { buttons1.insert(Buttons1::L) }
+    if state.button_select && state.button_right { buttons1.insert(Buttons1::R) }
 
     // Calculate data for buttons 2
     let mut buttons2 = Buttons2::NONE;
-    if state.button_start { buttons2.insert(Buttons2::START) }
-    if state.button_select { buttons2.insert(Buttons2::SELECT) }
+    if state.button_start && !state.button_select { buttons2.insert(Buttons2::START) }
+    if state.button_select && !state.button_start { buttons2.insert(Buttons2::SELECT) }
+    if state.button_start && state.button_select { buttons2.insert(Buttons2::HOME) }
 
     // Calculate data for D-pad
     let mut dpad: u8 = 0xF;
