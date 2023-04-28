@@ -94,7 +94,8 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
 /*     else if state.button_a {
         model_name = "VOK-00106";
         model = ControllerModel::VOK00106;
-    }  */
+        descriptors = (&vok00106::DEVICE_DESCRIPTOR, &vok00106::DESCRIPTORS, &vok00106::STRINGS);
+    } */
     else {
         println!("No controller selected.");
         return None;
