@@ -15,7 +15,7 @@ pub const DESCRIPTORS: [u8; 80] = [0x01, 0x00, 0x00, 0x00, 0x50, 0x00, 0x00, 0x0
 0x07, 0x05, 0x81, 0x03, 0x40, 0x00, 0x05];
 pub const STRINGS: [u8; 16] = [0x02, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
 
-pub const DEVICE_DESCRIPTOR: DeviceDescriptor = DeviceDescriptor{b_device_class: 0x0, b_device_sub_class: 0x0, id_vendor: 0x33DD, id_product: 0x0001, i_manufacturer: "TAITO", i_product: "Densha de Go! Plug & Play (NS One Handle mode)", i_serial_number: "ZKNS-001"};
+pub const DEVICE_DESCRIPTOR: DeviceDescriptor = DeviceDescriptor{b_device_class: 0x0, b_device_sub_class: 0x0, id_vendor: 0x33DD, id_product: 0x0001, bcd_device: 0x0106, i_manufacturer: "TAITO", i_product: "Densha de Go! Plug & Play (NS One Handle mode)", i_serial_number: "ZKNS-001"};
 
 pub const HID_REPORT_DESCRIPTOR: [u8; 94] = [
     0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
@@ -94,32 +94,39 @@ pub fn update_gadget(state: &mut ControllerState) {
         handle = BRAKE_NOTCHES[state.brake as usize];
     }
 
-    // Calculate data for buttons 1
+    // Calculate data for buttons
     let mut buttons1 = Buttons1::NONE;
+    let mut buttons2 = Buttons2::NONE;
+    if !state.button_select_hold && state.button_select && state.button_left {
+        buttons1.insert(Buttons1::L);
+        state.combo = true;
+    }
+    if !state.button_select_hold && state.button_select && state.button_right {
+        buttons1.insert(Buttons1::R);
+        state.combo = true;
+    }
+    if !state.button_select_hold && state.button_start && state.button_select {
+        buttons2.insert(Buttons2::HOME);
+        state.combo = true;
+    }
     if state.button_a { buttons1.insert(Buttons1::Y) }
     if state.button_b { buttons1.insert(Buttons1::B) }
     if state.button_c { buttons1.insert(Buttons1::A) }
     if state.button_d { buttons1.insert(Buttons1::X) }
     if state.brake == 9 { buttons1.insert(Buttons1::ZL) }
-    if state.button_select && state.button_left { buttons1.insert(Buttons1::L) }
-    if state.button_select && state.button_right { buttons1.insert(Buttons1::R) }
-
-    // Calculate data for buttons 2
-    let mut buttons2 = Buttons2::NONE;
-    if state.button_start && !state.button_select { buttons2.insert(Buttons2::START) }
-    if state.button_select && !state.button_start { buttons2.insert(Buttons2::SELECT) }
-    if state.button_start && state.button_select { buttons2.insert(Buttons2::HOME) }
+    if !state.combo && state.button_start { buttons2.insert(Buttons2::START) }
+    if !state.combo && state.button_select_hold { buttons2.insert(Buttons2::SELECT) }
 
     // Calculate data for D-pad
     let mut dpad: u8 = 0xF;
     if state.button_up { dpad = 0x0 }
     if state.button_down { dpad = 0x4 }
-    if state.button_left { dpad = 0x6 }
-    if state.button_right { dpad = 0x2 }
-    if state.button_up & state.button_left { dpad = 0x7 }
-    if state.button_up & state.button_right { dpad = 0x1 }
-    if state.button_down & state.button_left { dpad = 0x5 }
-    if state.button_down & state.button_right { dpad = 0x3 }
+    if !state.combo && state.button_left { dpad = 0x6 }
+    if !state.combo && state.button_right { dpad = 0x2 }
+    if !state.combo && state.button_up & state.button_left { dpad = 0x7 }
+    if !state.combo && state.button_up & state.button_right { dpad = 0x1 }
+    if !state.combo && state.button_down & state.button_left { dpad = 0x5 }
+    if !state.combo && state.button_down & state.button_right { dpad = 0x3 }
 
     // Assemble data and send it to gadget
     let data = [buttons1.bits, buttons2.bits, dpad, 0x80, handle, 0x80, 0x80, 0x00];

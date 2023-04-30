@@ -42,6 +42,7 @@ pub struct DeviceDescriptor {
     b_device_sub_class: u8,
     id_vendor: u16,
     id_product: u16,
+    bcd_device: u16,
     i_manufacturer: &'static str,
     i_product: &'static str,
     i_serial_number: &'static str,
@@ -175,6 +176,7 @@ fn init_gadget(model: &ControllerModel, (device, descriptors, strings): (&Device
     .arg(String::from("bDeviceSubClass=")+&device.b_device_sub_class.to_string())
     .arg(String::from("idVendor=")+&device.id_vendor.to_string())
     .arg(String::from("idProduct=")+&device.id_product.to_string())
+    .arg(String::from("bcdDevice=")+&device.bcd_device.to_string())
     .arg(String::from("iManufacturer=")+device.i_manufacturer)
     .arg(String::from("iProduct=")+device.i_product)
     .arg(String::from("iSerialNumber=")+device.i_serial_number)
@@ -213,6 +215,7 @@ fn init_gadget(model: &ControllerModel, (device, descriptors, strings): (&Device
         fs::write(gadget.join(Path::new("bDeviceSubClass")), &device.b_device_sub_class.to_string()).ok();
         fs::write(gadget.join(Path::new("idVendor")), format!("{:x}", &device.id_vendor)).ok();
         fs::write(gadget.join(Path::new("idProduct")), format!("{:x}", &device.id_product)).ok();
+        fs::write(gadget.join(Path::new("bcdDevice")), format!("{:x}", &device.bcd_device)).ok();
         fs::write(gadget.join(Path::new("iManufacturer")), &device.i_manufacturer.to_string()).ok();
         fs::write(gadget.join(Path::new("iProduct")), &device.i_product.to_string()).ok();
         fs::write(gadget.join(Path::new("iSerial")), &device.i_serial_number.to_string()).ok();

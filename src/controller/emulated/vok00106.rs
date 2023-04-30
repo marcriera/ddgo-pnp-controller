@@ -12,7 +12,7 @@ pub const DESCRIPTORS: [u8; 76] = [0x01, 0x00, 0x00, 0x00, 0x4C, 0x00, 0x00, 0x0
 0x07, 0x05, 0x81, 0x03, 0x08, 0x00, 0x01,];
 pub const STRINGS: [u8; 16] = [0x02, 0x00, 0x00, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
 
-pub const DEVICE_DESCRIPTOR: DeviceDescriptor = DeviceDescriptor{b_device_class: 0x02, b_device_sub_class: 0x0, id_vendor: 0x067B, id_product: 0x2303, i_manufacturer: "TAITO", i_product: "Densha de Go! Plug & Play (Master Controller II mode)", i_serial_number: "VOK-00106"};
+pub const DEVICE_DESCRIPTOR: DeviceDescriptor = DeviceDescriptor{b_device_class: 0x02, b_device_sub_class: 0x0, id_vendor: 0x067B, id_product: 0x2303, bcd_device: 0x0102, i_manufacturer: "TAITO", i_product: "Densha de Go! Plug & Play (Master Controller II mode)", i_serial_number: "VOK-00106"};
 
 
 const POWER_NOTCHES: [&str; 6] = ["TSA50", "TSA55", "TSA65", "TSA75", "TSA85", "TSA95"];

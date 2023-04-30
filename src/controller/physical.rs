@@ -1,6 +1,7 @@
 use std::fs::File;
 use std::io::Write;
 use std::io::Result;
+use std::time::{Instant,Duration};
 
 use evdev::Device;
 use evdev::Key;
@@ -10,6 +11,8 @@ pub struct ControllerState {
     pub power: u8,
     pub brake: u8,
     pub button_select: bool,
+    pub button_select_hold: bool,
+    pub button_select_time: Option<Instant>,
     pub button_start: bool,
     pub button_a: bool,
     pub button_b: bool,
@@ -21,7 +24,11 @@ pub struct ControllerState {
     pub button_right: bool,
     pub lamp: bool,
     pub rumble: bool,
+    pub combo: bool,
+    pub reverser: u8,
 }
+
+const HOLD_DELAY: Duration = Duration::from_millis(750);
 
 const USED_KEYS: [Key; 26] = [Key::KEY_0, Key::KEY_1, Key::KEY_2, Key::KEY_3, Key::KEY_4, Key::KEY_5,
                             Key::KEY_B, Key::KEY_C, Key::KEY_D, Key::KEY_E, Key::KEY_F, Key::KEY_G, Key::KEY_H, Key::KEY_I, Key::KEY_J, Key::KEY_P,
@@ -47,7 +54,7 @@ pub fn get_state(state: &mut ControllerState, dev: &[Device; 2]) {
 
 fn read_input(controller: &mut ControllerState, key: Key, value: bool) {
     // Save input status to object for processing
-    match key{
+    match key {
         Key::KEY_0=>if value {controller.power = 0},
         Key::KEY_1=>if value {controller.power = 1},
         Key::KEY_2=>if value {controller.power = 2},
@@ -64,7 +71,20 @@ fn read_input(controller: &mut ControllerState, key: Key, value: bool) {
         Key::KEY_I=>if value {controller.brake = 7},
         Key::KEY_J=>if value {controller.brake = 8},
         Key::KEY_P=>if value {controller.brake = 9},
-        Key::KEY_SPACE=>controller.button_select = value,
+        Key::KEY_SPACE=> {
+            if !controller.button_select && value {
+                controller.button_select_time = Some(Instant::now());
+            }
+            else if !value {
+                controller.button_select_time = None;
+                controller.combo = false;
+            }
+            controller.button_select = value;
+            controller.button_select_hold = value;
+            if let Some(time) = controller.button_select_time {
+                controller.button_select_hold = time.elapsed() > HOLD_DELAY && !controller.combo;
+            }
+        },
         Key::KEY_ENTER=>controller.button_start = value,
         Key::KEY_A=>controller.button_a = value,
         Key::KEY_Z=>controller.button_b = value,
