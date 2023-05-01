@@ -139,7 +139,6 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
 }
 
 pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
-    println!("CTRL TRANSFER: {:?}", data);
     if data[1] == 6 && data[3] == 34 {
         // Get HID report descriptor
         let report: Option<&[u8]>;
@@ -164,8 +163,11 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
         }
     }
     else if data[1] == 9 {
-        // Other control transfer, pass it to emulated controller loop
-        super::physical::set_lamp(true);
+        if let Ok(mut ep0) = File::open(&ENDPOINT0) {
+            let mut buffer = [0; 2];
+            ep0.read(&mut buffer).ok();
+            println!("CTRL data: {:?}", buffer);
+        }
     }
 }
 
@@ -191,6 +193,7 @@ fn init_gadget(model: &ControllerModel, (device, descriptors, strings): (&Device
             let mut buffer = [0; 12];
             loop {
                 if let Ok(_result) = ep0.read(&mut buffer) {
+                    println!("EP0: {:?}", buffer);
                     if buffer[8] == 0x4 {
                         // Control transfer received
                         handle_ctrl_transfer(controller_model, &buffer[0..8]);
