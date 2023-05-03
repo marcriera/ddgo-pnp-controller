@@ -22,6 +22,7 @@ mod zkns001;
 const FFS_MOUNT: &str = "/tmp/ffs";
 const ENDPOINT0: &str = "/tmp/ffs/ep0";
 const ENDPOINT1: &str = "/tmp/ffs/ep1";
+const ENDPOINT3: &str = "/tmp/ffs/ep3";
 const ANDROID_GADGET: &str = "/sys/class/android_usb/android0";
 
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -92,11 +93,11 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
         model = ControllerModel::SOTP031201P5B7;
         descriptors = (&sotp031201_p5b7::DEVICE_DESCRIPTOR, &sotp031201_p5b7::DESCRIPTORS, &sotp031201_p5b7::STRINGS);
     }
-/*     else if state.button_a {
+    else if state.button_a {
         model_name = "VOK-00106";
         model = ControllerModel::VOK00106;
         descriptors = (&vok00106::DEVICE_DESCRIPTOR, &vok00106::DESCRIPTORS, &vok00106::STRINGS);
-    } */
+    }
     else {
         println!("No controller selected.");
         return None;
@@ -139,6 +140,7 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
 }
 
 pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
+    println!("CTRL REQ: {:?}", data);
     if data[1] == 6 && data[3] == 34 {
         // Get HID report descriptor
         let report: Option<&[u8]>;
@@ -164,9 +166,9 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
     }
     else if data[1] == 9 {
         if let Ok(mut ep0) = File::open(&ENDPOINT0) {
-            let mut buffer = [0; 2];
-            ep0.read(&mut buffer).ok();
-            println!("CTRL data: {:?}", buffer);
+            let mut buffer = [0; 8];
+            ep0.read(&mut buffer).unwrap();
+            println!("CTRL DAT: {:?}", buffer);
         }
     }
 }
@@ -193,7 +195,6 @@ fn init_gadget(model: &ControllerModel, (device, descriptors, strings): (&Device
             let mut buffer = [0; 12];
             loop {
                 if let Ok(_result) = ep0.read(&mut buffer) {
-                    println!("EP0: {:?}", buffer);
                     if buffer[8] == 0x4 {
                         // Control transfer received
                         handle_ctrl_transfer(controller_model, &buffer[0..8]);
