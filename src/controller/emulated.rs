@@ -22,7 +22,6 @@ mod zkns001;
 const FFS_MOUNT: &str = "/tmp/ffs";
 const ENDPOINT0: &str = "/tmp/ffs/ep0";
 const ENDPOINT1: &str = "/tmp/ffs/ep1";
-const ENDPOINT3: &str = "/tmp/ffs/ep3";
 const ANDROID_GADGET: &str = "/sys/class/android_usb/android0";
 
 #[derive(PartialEq, Debug, Clone, Copy)]
@@ -140,7 +139,7 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
 }
 
 pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
-    println!("CTRL REQ: {:?}", data);
+    //println!("CTRL REQ: {:?}", data);
     if data[1] == 6 && data[3] == 34 {
         // Get HID report descriptor
         let report: Option<&[u8]>;
@@ -165,11 +164,11 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
         }
     }
     else if data[1] == 9 {
-        if let Ok(mut ep0) = File::open(&ENDPOINT0) {
-            let mut buffer = [0; 8];
-            ep0.read(&mut buffer).unwrap();
-            println!("CTRL DAT: {:?}", buffer);
-        }
+        // if let Ok(mut ep0) = File::open(&ENDPOINT0) {
+        //     let mut buffer = [0; 8];
+        //     ep0.read(&mut buffer).ok();
+        //     println!("CTRL DAT: {:?}", buffer);
+        // }
     }
 }
 
@@ -223,7 +222,7 @@ fn init_gadget(model: &ControllerModel, (device, descriptors, strings): (&Device
         fs::write(gadget.join(Path::new("iManufacturer")), &device.i_manufacturer.to_string()).ok();
         fs::write(gadget.join(Path::new("iProduct")), &device.i_product.to_string()).ok();
         fs::write(gadget.join(Path::new("iSerial")), &device.i_serial_number.to_string()).ok();
-        fs::write(gadget.join(Path::new("functions")), "ffs").ok();
+        fs::write(gadget.join(Path::new("functions")), "ffs,rndis").ok();
         fs::write(gadget.join(Path::new("f_ffs/aliases")), "ffs").ok();
         fs::write(gadget.join(Path::new("enable")), "1").ok();
     }
