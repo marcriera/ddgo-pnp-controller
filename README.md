@@ -26,10 +26,9 @@ Connect the Plug & Play to a PC or console using the data cable. Press one of th
 | Two handle controller (PC)              | RIGHT                 | D-Pad is mapped to SELECT+ABCD                   |
 | Two handle controller "Type 2" (PS2)    | D                     |                                                  |
 | Shinkansen controller (PS2)             | B                     | Power notches are mapped to P2-P4-P7-P10-P13     |
-| Multi Train Controller (PS2) - P4/B7    | C + Power handle at 0 |                                                  |
-| Multi Train Controller (PS2) - P4/B2-B6 | C + Power handle at 1 |                                                  |
-| Multi Train Controller (PS2) - P5/B5    | C + Power handle at 2 |                                                  |
-| Multi Train Controller (PS2) - P5/B7    | C + Power handle at 3 | Beta, currently undetected by game               |
+| Multi Train Controller (PS2) - P4/B7    | C + Power handle at 0 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
+| Multi Train Controller (PS2) - P4/B2-B6 | C + Power handle at 1 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
+| Multi Train Controller (PS2) - P5/B5    | C + Power handle at 2 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
 
 Hold the buttons until the controller vibrates to confirm selection. If no button is pressed, you can play with the Plug & Play as usual.
 
@@ -41,7 +40,7 @@ When no controller is selected, RNDIS access is enabled in the device. You can a
 
 ## Notes
 
-- During the first installation, the device's kernel is backed up to a folder named *BACKUP* in the root of the USB drive. Copy its contents to a safe location.
+- During the first installation, if no previous mods are detected, the device's original kernel is backed up to a folder named *BACKUP* in the root of the USB drive. Copy its contents to a safe location.
 - If detected, the [original mod by GMMan](https://github.com/GMMan/dengo-plug-and-play-controller) will be uninstalled to avoid conflicts.
 
 ## Compilation
