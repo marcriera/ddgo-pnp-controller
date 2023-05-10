@@ -34,7 +34,7 @@ if ! mount -o remount,rw /; then
 fi
 
 # Backup original kernel
-if [ ! -f "${USB_ROOT}/BACKUP/uImage" ]; then
+if [ ! -f "${USB_ROOT}/BACKUP/uImage" ] && [ ! -f "/usr/bin/input_relay" ] && [ ! -f "/usr/bin/ddgo-pnp-controller" ]; then
     if ! cp /tmp/boot/uImage "${USB_ROOT}/BACKUP/"; then
         echo "Failed to backup original kernel"
         rm -f "${USB_ROOT}/BACKUP/uImage"
@@ -52,7 +52,7 @@ if ! cp -f "${USB_ROOT}/payload/uImage" /tmp/boot/uImage; then
 fi
 
 # Backup original mali.ko
-if [ ! -f "${USB_ROOT}/BACKUP/mali.ko" ]; then
+if [ ! -f "${USB_ROOT}/BACKUP/mali.ko" ] && [ ! -f "/usr/bin/input_relay" ] && [ ! -f "/usr/bin/ddgo-pnp-controller" ]; then
     if ! cp /lib/modules/3.4.113/extra/mali.ko "${USB_ROOT}/BACKUP/"; then
         echo "Failed to backup original mali.ko"
         rm -f "${USB_ROOT}/BACKUP/mali.ko"
@@ -72,8 +72,16 @@ fi
 chmod 644 /lib/modules/3.4.113/extra/mali.ko
 
 # Remove old files by GMMan
-rm /usr/lib/libevdev.so.2
-rm /usr/bin/input_relay
+if [ -f "/usr/lib/libevdev.so.2" ]; then
+    if ! rm -f "/usr/lib/libevdev.so.2"; then
+        echo "Failed to remove libevdev.so.2"
+    fi
+fi
+if [ -f "/usr/bin/input_relay" ]; then
+    if ! rm -f "/usr/bin/input_relay"; then
+        echo "Failed to remove input_relay"
+    fi
+fi
 
 # Install files
 if ! cp -f "${USB_ROOT}/payload/S40usbotg" /etc/init.d; then
