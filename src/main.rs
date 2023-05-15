@@ -11,7 +11,7 @@ fn main() -> Result<()> {
     match controller::physical::init() {
         Ok(dev) => {
             // Wait 3 seconds and get current state of the controller
-            println!("Press a button to select the controller model...");
+            println!("ddgo-pnp-controller: Press a button to select the controller model...");
             sleep(Duration::from_secs(3));
             let mut controller_state = Default::default();
             controller::physical::get_state(&mut controller_state, &dev);
@@ -44,7 +44,7 @@ fn main() -> Result<()> {
             }
             return Result::Ok(());
         },
-        Err(_e) => println!("ERROR: Could not read input devices! Exiting."),
+        Err(_e) => println!("ddgo-pnp-controller: ERROR: Could not read input devices! Exiting."),
     }
     Ok(())
 }

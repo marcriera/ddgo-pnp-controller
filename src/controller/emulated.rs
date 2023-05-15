@@ -98,10 +98,11 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
         descriptors = (&vok00106::DEVICE_DESCRIPTOR, &vok00106::DESCRIPTORS, &vok00106::STRINGS);
     } */
     else {
-        println!("No controller selected.");
+        println!("ddgo-pnp-controller: No controller selected, starting RNDIS gadget.");
+        Command::new("rndis-gadget.sh").output().ok();
         return None;
     }
-    println!("Selected controller {}.", model_name);
+    println!("ddgo-pnp-controller: Selected controller {}.", model_name);
     init_gadget(&model, descriptors);
     return Some(model);
 }
@@ -139,7 +140,7 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
 }
 
 pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
-    //println!("CTRL REQ: {:?}", data);
+    println!("ddgo-pnp-controller: CTRL REQ: {:?}", data);
     if data[1] == 6 && data[3] == 34 {
         // Get HID report descriptor
         let report: Option<&[u8]>;
@@ -164,11 +165,6 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
         }
     }
     else if data[1] == 9 {
-        // if let Ok(mut ep0) = File::open(&ENDPOINT0) {
-        //     let mut buffer = [0; 8];
-        //     ep0.read(&mut buffer).ok();
-        //     println!("CTRL DAT: {:?}", buffer);
-        // }
     }
 }
 
@@ -206,9 +202,9 @@ fn init_gadget(model: &ControllerModel, (device, descriptors, strings): (&Device
     });
     if let Ok(mut ep0) = File::create(&ENDPOINT0) {
         ep0.write_all(descriptors).ok();
-        println!("USB Gadget: Descriptors written to EP0");
+        println!("ddgo-pnp-controller: Descriptors written to EP0");
         ep0.write_all(strings).ok();
-        println!("USB Gadget: Strings written to EP0");
+        println!("ddgo-pnp-controller: Strings written to EP0");
     }
 
     // Init Android Gadget for old 3.4 kernel
@@ -222,7 +218,7 @@ fn init_gadget(model: &ControllerModel, (device, descriptors, strings): (&Device
         fs::write(gadget.join(Path::new("iManufacturer")), &device.i_manufacturer.to_string()).ok();
         fs::write(gadget.join(Path::new("iProduct")), &device.i_product.to_string()).ok();
         fs::write(gadget.join(Path::new("iSerial")), &device.i_serial_number.to_string()).ok();
-        fs::write(gadget.join(Path::new("functions")), "ffs,rndis").ok();
+        fs::write(gadget.join(Path::new("functions")), "ffs").ok();
         fs::write(gadget.join(Path::new("f_ffs/aliases")), "ffs").ok();
         fs::write(gadget.join(Path::new("enable")), "1").ok();
     }

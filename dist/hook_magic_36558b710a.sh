@@ -98,6 +98,14 @@ fi
 
 chmod 755 /usr/bin/ddgo-pnp-controller
 
+
+if ! cp -f "${USB_ROOT}/payload/rndis-gadget.sh" /usr/bin; then
+    echo "Failed to install rndis-gadget.sh"
+    error_exit
+fi
+
+chmod 755 /usr/bin/rndis-gadget.sh
+
 echo "Installation complete"
 
 # We're done
