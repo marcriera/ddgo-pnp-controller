@@ -18,6 +18,7 @@ mod sotp031201_p5b5;
 mod sotp031201_p5b7;
 mod vok00106;
 mod zkns001;
+mod slph00051;
 
 const FFS_MOUNT: &str = "/tmp/ffs";
 const ENDPOINT0: &str = "/tmp/ffs/ep0";
@@ -35,6 +36,7 @@ pub enum ControllerModel {
     SOTP031201P5B7,
     VOK00106,
     ZKNS001,
+    SLPH00051,
 }
 
 pub struct DeviceDescriptor {
@@ -61,6 +63,11 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
         model_name = "ZKNS-001";
         model = ControllerModel::ZKNS001;
         descriptors = (&zkns001::DEVICE_DESCRIPTOR, &zkns001::DESCRIPTORS, &zkns001::STRINGS);
+    }
+    else if state.button_down && state.power == 0 {
+        model_name = "SLPH-00051";
+        model = ControllerModel::SLPH00051;
+        descriptors = (&slph00051::DEVICE_DESCRIPTOR, &slph00051::DESCRIPTORS, &slph00051::STRINGS);
     }
     else if state.button_d {
         model_name = "TCPP-20009";
@@ -136,6 +143,9 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
         ControllerModel::ZKNS001 => {
             zkns001::update_gadget(state);
         }
+        ControllerModel::SLPH00051 => {
+            slph00051::update_gadget(state);
+        }
     }
 }
 
@@ -150,6 +160,9 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
             }
             ControllerModel::ZKNS001 => {
                 report = Some(&zkns001::HID_REPORT_DESCRIPTOR);
+            }
+            ControllerModel::SLPH00051 => {
+                report = Some(&slph00051::HID_REPORT_DESCRIPTOR);
             }
             _ => {
                 report = None;
