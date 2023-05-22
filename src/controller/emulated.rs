@@ -177,7 +177,13 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
             None => (),
         }
     }
-    else if data[1] == 9 {
+    else {
+        match model {
+            ControllerModel::SLPH00051 => {
+                slph00051::handle_ctrl_transfer(data);
+            }
+            _ => ()
+        }
     }
 }
 
