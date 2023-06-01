@@ -20,16 +20,17 @@ This mod allows you to use your Densha de GO! Plug & Play as a USB controller fo
 
 Connect the Plug & Play to a PC or console using the data cable. Press one of the following button combinations to select the controller you want to emulate:
 
-| Controller                              | Button combination    | Notes                                            |
-|-----------------------------------------|-----------------------|--------------------------------------------------|
-| One handle controller (Nintendo Switch) | UP                    | SELECT+START=HOME, SELECT+LEFT=L, SELECT+RIGHT=R |
-| Two handle controller (PC)              | RIGHT                 | D-Pad is mapped to SELECT+ABCD                   |
-| Two handle controller "Type 2" (PS2)    | D                     |                                                  |
-| Shinkansen controller (PS2)             | B                     | Power notches are mapped to P2-P4-P7-P10-P13     |
-| Multi Train Controller (PS2) - P4/B7    | C + Power handle at 0 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
-| Multi Train Controller (PS2) - P4/B2-B6 | C + Power handle at 1 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
-| Multi Train Controller (PS2) - P5/B5    | C + Power handle at 2 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
-| Multi Train Controller (PS2) - P5/B7    | C + Power handle at 3 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
+| Controller                              | Button combination       | Notes                                            |
+|-----------------------------------------|--------------------------|--------------------------------------------------|
+| One handle controller (Nintendo Switch) | UP                       | SELECT+START=HOME, SELECT+LEFT=L, SELECT+RIGHT=R |
+| Two handle controller (PC)              | RIGHT                    | D-Pad is mapped to SELECT+ABCD                   |
+| Two handle controller (PS1)             | DOWN + Power handle at 0 | Hold D to disable handles and enable D-Pad       |
+| Two handle controller "Type 2" (PS2)    | D                        |                                                  |
+| Shinkansen controller (PS2)             | B                        | Power notches are mapped to P2-P4-P7-P10-P13     |
+| Multi Train Controller (PS2) - P4/B7    | C + Power handle at 0    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
+| Multi Train Controller (PS2) - P4/B2-B6 | C + Power handle at 1    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
+| Multi Train Controller (PS2) - P5/B5    | C + Power handle at 2    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
+| Multi Train Controller (PS2) - P5/B7    | C + Power handle at 3    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
 
 Hold the buttons until the controller vibrates to confirm selection. If no button is pressed, you can play with the Plug & Play as usual.
 

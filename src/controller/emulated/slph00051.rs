@@ -134,61 +134,72 @@ bitflags! {
 }
 
 pub fn update_gadget(state: &mut ControllerState) {
-    let mut buttons1 = Buttons1::UP | Buttons1::DOWN;
+    let mut buttons1 = Buttons1::NONE;
     let mut buttons2 = Buttons2::NONE;
 
-    // Calculate data for handles
-    match state.power {
-        0 => {
-            buttons1.insert(Buttons1::LEFT | Buttons1::RIGHT);
+    // If D is pressed, D-pad mode is active
+    if !state.button_d {
+        // Calculate data for handles
+        buttons1.insert(Buttons1::UP | Buttons1::DOWN);
+        match state.power {
+            0 => {
+                buttons1.insert(Buttons1::LEFT | Buttons1::RIGHT);
+            }
+            1 => {
+                buttons1.insert(Buttons1::RIGHT);
+                buttons2.insert(Buttons2::TRIANGLE);
+            }
+            2 => {
+                buttons1.insert(Buttons1::RIGHT);
+            }
+            3 => {
+                buttons1.insert(Buttons1::LEFT);
+                buttons2.insert(Buttons2::TRIANGLE);
+            }
+            4 => {
+                buttons1.insert(Buttons1::LEFT);
+            }
+            _ => {
+                buttons2.insert(Buttons2::TRIANGLE);
+            }        
         }
-        1 => {
-            buttons1.insert(Buttons1::RIGHT);
-            buttons2.insert(Buttons2::TRIANGLE);
+        match state.brake {
+            0 => {
+                buttons2.insert(Buttons2::L2 | Buttons2::R1 | Buttons2::R2);
+            }
+            1 => {
+                buttons2.insert(Buttons2::L1 | Buttons2::R1 | Buttons2::R2);
+            }
+            2 => {
+                buttons2.insert(Buttons2::R1 | Buttons2::R2);
+            }
+            3 => {
+                buttons2.insert(Buttons2::L1 | Buttons2::L2 | Buttons2::R2);
+            }
+            4 => {
+                buttons2.insert(Buttons2::L2 | Buttons2::R2);
+            }
+            5 => {
+                buttons2.insert(Buttons2::L1 | Buttons2::R2);
+            }
+            6 => {
+                buttons2.insert(Buttons2::R2);
+            }
+            7 => {
+                buttons2.insert(Buttons2::L1 | Buttons2::L2 | Buttons2::R1);
+            }
+            8 => {
+                buttons2.insert(Buttons2::L2 | Buttons2::R1);
+            }
+            _ => ()       
         }
-        2 => {
-            buttons1.insert(Buttons1::RIGHT);
-        }
-        3 => {
-            buttons1.insert(Buttons1::LEFT);
-            buttons2.insert(Buttons2::TRIANGLE);
-        }
-        4 => {
-            buttons1.insert(Buttons1::LEFT);
-        }
-        _ => {
-            buttons2.insert(Buttons2::TRIANGLE);
-        }        
     }
-    match state.brake {
-        0 => {
-            buttons2.insert(Buttons2::L2 | Buttons2::R1 | Buttons2::R2);
-        }
-        1 => {
-            buttons2.insert(Buttons2::L1 | Buttons2::R1 | Buttons2::R2);
-        }
-        2 => {
-            buttons2.insert(Buttons2::R1 | Buttons2::R2);
-        }
-        3 => {
-            buttons2.insert(Buttons2::L1 | Buttons2::L2 | Buttons2::R2);
-        }
-        4 => {
-            buttons2.insert(Buttons2::L2 | Buttons2::R2);
-        }
-        5 => {
-            buttons2.insert(Buttons2::L1 | Buttons2::R2);
-        }
-        6 => {
-            buttons2.insert(Buttons2::R2);
-        }
-        7 => {
-            buttons2.insert(Buttons2::L1 | Buttons2::L2 | Buttons2::R1);
-        }
-        8 => {
-            buttons2.insert(Buttons2::L2 | Buttons2::R1);
-        }
-        _ => ()       
+    else {
+        // D-pad mode
+        if state.button_up { buttons1.insert(Buttons1::UP) }
+        if state.button_down { buttons1.insert(Buttons1::DOWN) }
+        if state.button_left { buttons1.insert(Buttons1::LEFT) }
+        if state.button_right { buttons1.insert(Buttons1::RIGHT) }
     }
 
     // Calculate data for buttons
