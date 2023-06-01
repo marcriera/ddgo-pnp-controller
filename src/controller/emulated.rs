@@ -94,12 +94,12 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
         model = ControllerModel::SOTP031201P5B5;
         descriptors = (&sotp031201_p5b5::DEVICE_DESCRIPTOR, &sotp031201_p5b5::DESCRIPTORS, &sotp031201_p5b5::STRINGS);
     }
-/*     else if state.button_c && state.power == 3 {
+    else if state.button_c && state.power == 3 {
         model_name = "SOTP-031201 (P5/B7 mode)";
         model = ControllerModel::SOTP031201P5B7;
         descriptors = (&sotp031201_p5b7::DEVICE_DESCRIPTOR, &sotp031201_p5b7::DESCRIPTORS, &sotp031201_p5b7::STRINGS);
     }
-    else if state.button_a {
+/*    else if state.button_a {
         model_name = "VOK-00106";
         model = ControllerModel::VOK00106;
         descriptors = (&vok00106::DEVICE_DESCRIPTOR, &vok00106::DESCRIPTORS, &vok00106::STRINGS);

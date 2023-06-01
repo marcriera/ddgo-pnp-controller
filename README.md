@@ -29,6 +29,7 @@ Connect the Plug & Play to a PC or console using the data cable. Press one of th
 | Multi Train Controller (PS2) - P4/B7    | C + Power handle at 0 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
 | Multi Train Controller (PS2) - P4/B2-B6 | C + Power handle at 1 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
 | Multi Train Controller (PS2) - P5/B5    | C + Power handle at 2 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
+| Multi Train Controller (PS2) - P5/B7    | C + Power handle at 3 | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
 
 Hold the buttons until the controller vibrates to confirm selection. If no button is pressed, you can play with the Plug & Play as usual.
 
