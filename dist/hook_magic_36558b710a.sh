@@ -33,6 +33,9 @@ if ! mount -o remount,rw /; then
     error_exit
 fi
 
+# Create backup folder
+mkdir -p "${USB_ROOT}/BACKUP"
+
 # Backup original kernel
 if [ ! -f "${USB_ROOT}/BACKUP/uImage" ] && [ ! -f "/usr/bin/input_relay" ] && [ ! -f "/usr/bin/ddgo-pnp-controller" ]; then
     if ! cp /tmp/boot/uImage "${USB_ROOT}/BACKUP/"; then
