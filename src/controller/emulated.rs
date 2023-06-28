@@ -16,7 +16,6 @@ mod sotp031201_p4b7;
 mod sotp031201_p4b2b7;
 mod sotp031201_p5b5;
 mod sotp031201_p5b7;
-mod vok00106;
 mod zkns001;
 mod slph00051;
 
@@ -34,7 +33,6 @@ pub enum ControllerModel {
     SOTP031201P4B2B7,
     SOTP031201P5B5,
     SOTP031201P5B7,
-    VOK00106,
     ZKNS001,
     SLPH00051,
 }
@@ -99,11 +97,6 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
         model = ControllerModel::SOTP031201P5B7;
         descriptors = (&sotp031201_p5b7::DEVICE_DESCRIPTOR, &sotp031201_p5b7::DESCRIPTORS, &sotp031201_p5b7::STRINGS);
     }
-/*    else if state.button_a {
-        model_name = "VOK-00106";
-        model = ControllerModel::VOK00106;
-        descriptors = (&vok00106::DEVICE_DESCRIPTOR, &vok00106::DESCRIPTORS, &vok00106::STRINGS);
-    } */
     else {
         println!("ddgo-pnp-controller: No controller selected, starting RNDIS gadget.");
         Command::new("rndis-gadget.sh").output().ok();
@@ -136,9 +129,6 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
         }
         ControllerModel::SOTP031201P5B7 => {
             sotp031201_p5b7::update_gadget(state);
-        }
-        ControllerModel::VOK00106 => {
-            vok00106::update_gadget(state);
         }
         ControllerModel::ZKNS001 => {
             zkns001::update_gadget(state);
