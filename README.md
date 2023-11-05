@@ -28,7 +28,7 @@ Connect the Plug & Play to a PC or console using the data cable. Press one of th
 | Two handle controller "Type 2" (PS2)    | D                        |                                                  |
 | Shinkansen controller (PS2)             | B                        | Power notches are mapped to P2-P4-P7-P10-P13     |
 | Multi Train Controller (PS2) - P4/B7    | C + Power handle at 0    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
-| Multi Train Controller (PS2) - P4/B2-B6 | C + Power handle at 1    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
+| Multi Train Controller (PS2) - P4/B2-B7 | C + Power handle at 1    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
 | Multi Train Controller (PS2) - P5/B5    | C + Power handle at 2    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
 | Multi Train Controller (PS2) - P5/B7    | C + Power handle at 3    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
 
