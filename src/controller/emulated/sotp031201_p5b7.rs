@@ -70,8 +70,8 @@ pub fn update_gadget(state: &mut ControllerState) {
     }
     if !state.combo && state.button_a { buttons1.insert(Buttons1::A) }
     if state.button_b { buttons1.insert(Buttons1::B) }
-    if !state.combo && state.button_c { buttons1.insert(Buttons1::C) }
-    if state.button_d { buttons1.insert(Buttons1::D) }
+    if state.button_c { buttons1.insert(Buttons1::C) }
+    if !state.combo && state.button_d { buttons1.insert(Buttons1::D) }
     if !state.combo && state.button_up { buttons2.insert(Buttons2::UP) }
     if !state.combo && state.button_down { buttons2.insert(Buttons2::DOWN) }
     if !state.combo && state.button_left { buttons2.insert(Buttons2::LEFT) }

@@ -1,5 +1,6 @@
 use std::fs::File;
-use std::io::{Write};
+use std::io::Write;
+
 use bitflags::bitflags;
 use crate::controller::physical::ControllerState;
 use crate::controller::emulated::{DeviceDescriptor, ENDPOINT1};
