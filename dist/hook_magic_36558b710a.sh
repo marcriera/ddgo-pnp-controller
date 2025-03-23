@@ -36,6 +36,22 @@ fi
 # Create backup folder
 mkdir -p "${USB_ROOT}/BACKUP"
 
+# Revert changes flag detected, restore original files
+if [ -f "${USB_ROOT}/revert" ]; then
+    if [ ! -f "${USB_ROOT}/BACKUP/uImage" ] || [ ! -f "${USB_ROOT}/BACKUP/mali.ko" ]; then
+        echo "Backup not found, cannot revert."
+        error_exit
+    fi
+    cp "${USB_ROOT}/BACKUP/uImage" /tmp/boot/uImage
+    cp "${USB_ROOT}/BACKUP/mali.ko" /lib/modules/3.4.113/extra/mali.ko
+    rm /etc/init.d/S40usbotg
+    rm /usr/bin/rndis-gadget.sh
+    rm /usr/bin/ddgo-pnp-controller
+    rm "${USB_ROOT}/revert"
+    poweroff
+    exit
+fi
+
 # Backup original kernel
 if [ ! -f "${USB_ROOT}/BACKUP/uImage" ] && [ ! -f "/usr/bin/input_relay" ] && [ ! -f "/usr/bin/ddgo-pnp-controller" ]; then
     if ! cp /tmp/boot/uImage "${USB_ROOT}/BACKUP/"; then

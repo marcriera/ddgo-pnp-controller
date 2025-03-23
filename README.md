@@ -16,6 +16,18 @@ This mod allows you to use your Densha de GO! Plug & Play as a USB controller fo
 4. Plug the USB drive to the OTG adapter, plug the adapter to the Plug & Play and plug the data cable to the adapter and a power source.
 5. Turn on the Plug & Play. The door lamp will turn on to show the installation has begun. Once it has finished, the lamp will turn off. Turn off the unit and remove everything.
 
+## Uninstallation
+
+To completely remove the mod, follow these steps. **You need the backup of the original kernel created during installation**. 
+
+1. Prepare the USB flash drive by formatting it with a single FAT32 partition.
+2. Download the latest release from the [Releases](https://github.com/MarcRiera/ddgo-pnp-controller/releases) section.
+3. Extract the content to the root of the USB drive.
+4. Create an empty file named `revert` on the root of the USB drive.
+5. Put the original (backup) files `uImage` and `mali.ko` into a folder named `BACKUP` on the root of the USB drive.
+6. Plug the USB drive to the OTG adapter, plug the adapter to the Plug & Play and plug the data cable to the adapter and a power source.
+7. Turn on the Plug & Play. The door lamp will turn on to show the uninstallation has begun. Once it has finished, the lamp will turn off. Turn off the unit and remove everything.
+
 ## Usage
 
 Connect the Plug & Play to a PC or console using the data cable. Press one of the following button combinations to select the controller you want to emulate:
