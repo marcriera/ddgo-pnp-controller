@@ -2,10 +2,10 @@ mod controller;
 
 use std::io::Result;
 use std::process::Command;
-use std::time::Duration;
 use std::thread::sleep;
+use std::time::Duration;
 
-use controller::physical::{set_lamp,set_rumble};
+use controller::physical::{set_lamp, set_rumble};
 
 fn main() -> Result<()> {
     match controller::physical::init() {
@@ -18,7 +18,6 @@ fn main() -> Result<()> {
 
             // Check selected controller model
             if let Some(controller_model) = controller::emulated::set_model(&controller_state) {
-                
                 // Stop main game
                 stop_game();
 
@@ -43,12 +42,15 @@ fn main() -> Result<()> {
                 }
             }
             return Result::Ok(());
-        },
+        }
         Err(_e) => println!("ddgo-pnp-controller: ERROR: Could not read input devices! Exiting."),
     }
     Ok(())
 }
 
 fn stop_game() {
-    Command::new("/etc/init.d/S99dgtype3").arg("stop").output().ok();
+    Command::new("/etc/init.d/S99dgtype3")
+        .arg("stop")
+        .output()
+        .ok();
 }
