@@ -18,6 +18,7 @@ mod sotp031201_p5b7;
 mod tcpp20009;
 mod tcpp20011;
 mod zkns001;
+mod generic;
 
 const FFS_MOUNT: &str = "/tmp/ffs";
 const ENDPOINT0: &str = "/tmp/ffs/ep0";
@@ -35,6 +36,7 @@ pub enum ControllerModel {
     SOTP031201P5B7,
     ZKNS001,
     SLPH00051,
+    GENERIC,
 }
 
 pub struct DeviceDescriptor {
@@ -83,6 +85,14 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
             &tcpp20009::DEVICE_DESCRIPTOR,
             &tcpp20009::DESCRIPTORS,
             &tcpp20009::STRINGS,
+        );
+    } else if state.button_a {
+        model_name = "Generic Train Controller";
+        model = ControllerModel::GENERIC;
+        descriptors = (
+            &generic::DEVICE_DESCRIPTOR,
+            &generic::DESCRIPTORS,
+            &generic::STRINGS,
         );
     } else if state.button_b {
         model_name = "TCPP-20011";
@@ -163,6 +173,9 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
         ControllerModel::SLPH00051 => {
             slph00051::update_gadget(state);
         }
+        ControllerModel::GENERIC => {
+            generic::update_gadget(state);
+        }
     }
 }
 
@@ -181,6 +194,9 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
             ControllerModel::SLPH00051 => {
                 report = Some(&slph00051::HID_REPORT_DESCRIPTOR);
             }
+            ControllerModel::GENERIC => {
+                report = Some(&generic::HID_REPORT_DESCRIPTOR);
+            }
             _ => {
                 report = None;
             }
@@ -197,6 +213,9 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
         match model {
             ControllerModel::SLPH00051 => {
                 slph00051::handle_ctrl_transfer(data);
+            }
+            ControllerModel::GENERIC => {
+                generic::handle_ctrl_transfer(data);
             }
             _ => (),
         }
