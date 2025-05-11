@@ -15,6 +15,7 @@ mod sotp031201_p4b2b7;
 mod sotp031201_p4b7;
 mod sotp031201_p5b5;
 mod sotp031201_p5b7;
+mod tcpp20003;
 mod tcpp20009;
 mod tcpp20011;
 mod zkns001;
@@ -28,6 +29,7 @@ const ANDROID_GADGET: &str = "/sys/class/android_usb/android0";
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum ControllerModel {
     DGOC44U,
+    TCPP20003,
     TCPP20009,
     TCPP20011,
     SOTP031201P4B7,
@@ -77,6 +79,14 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
             &slph00051::DEVICE_DESCRIPTOR,
             &slph00051::DESCRIPTORS,
             &slph00051::STRINGS,
+        );
+    } else if state.button_down && state.power == 1 {
+        model_name = "TCPP-20004";
+        model = ControllerModel::TCPP20003;
+        descriptors = (
+            &tcpp20003::DEVICE_DESCRIPTOR,
+            &tcpp20003::DESCRIPTORS,
+            &tcpp20003::STRINGS,
         );
     } else if state.button_d {
         model_name = "TCPP-20009";
@@ -149,6 +159,9 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
         ControllerModel::DGOC44U => {
             dgoc44u::update_gadget(state);
         }
+        ControllerModel::TCPP20003 => {
+            tcpp20003::update_gadget(state);
+        }
         ControllerModel::TCPP20009 => {
             tcpp20009::update_gadget(state);
         }
@@ -194,6 +207,9 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
             ControllerModel::SLPH00051 => {
                 report = Some(&slph00051::HID_REPORT_DESCRIPTOR);
             }
+            ControllerModel::TCPP20003 => {
+                report = Some(&tcpp20003::HID_REPORT_DESCRIPTOR);
+            }
             ControllerModel::GENERIC => {
                 report = Some(&generic::HID_REPORT_DESCRIPTOR);
             }
@@ -213,6 +229,9 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
         match model {
             ControllerModel::SLPH00051 => {
                 slph00051::handle_ctrl_transfer(data);
+            }
+            ControllerModel::TCPP20003 => {
+                tcpp20003::handle_ctrl_transfer(data);
             }
             ControllerModel::GENERIC => {
                 generic::handle_ctrl_transfer(data);

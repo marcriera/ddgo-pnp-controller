@@ -37,6 +37,7 @@ Connect the Plug & Play to a PC or console using the data cable. Press one of th
 | One handle controller (Nintendo Switch) | UP                       | SELECT+START=HOME, SELECT+LEFT=L, SELECT+RIGHT=R |
 | Two handle controller (PC)              | RIGHT                    | D-Pad is mapped to SELECT+ABCD                   |
 | Two handle controller (PS1)             | DOWN + Power handle at 0 | Hold D to disable handles and enable D-Pad       |
+| Two handle controller (N64)             | DOWN + Power handle at 1 |                                                  |
 | Two handle controller "Type 2" (PS2)    | D                        |                                                  |
 | Shinkansen controller (PS2)             | B                        | Power notches are mapped to P2-P4-P7-P10-P13     |
 | Multi Train Controller (PS2) - P4/B7    | C + Power handle at 0    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
@@ -48,6 +49,20 @@ Connect the Plug & Play to a PC or console using the data cable. Press one of th
 Hold the buttons until the controller vibrates to confirm selection. If no button is pressed, you can play with the Plug & Play as usual.
 
 If you need more information regarding each controller and supported software, please check the [Densha de GO! controller documentation](https://marcriera.github.io/ddgo-controller-docs).
+
+## Usage with emulators
+
+### Nintendo 64
+
+Use mode *Two handle controller (N64)* In the emulator's settings, assign the controller to **port 3**. The controller should map automatically. Make sure to enable the setting **Independent C-Buttons controls**. 
+
+### PlayStation
+
+Use mode *Two handle controller (PS1)*. In the emulator's settings, configure a regular analog/digital controller (**not a Densha de GO! controller**). The controller should map automatically. If the handles become unresponsive at some point., press **D**.
+
+### PlayStation 2
+
+Use mode *Generic Train Controller*. In the emulator's settings, configure a USB Densha de GO! controller and map the buttons/axes manually.
 
 ## RNDIS access (advanced users)
 
