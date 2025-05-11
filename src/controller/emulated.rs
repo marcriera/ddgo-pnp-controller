@@ -15,6 +15,7 @@ mod sotp031201_p4b2b7;
 mod sotp031201_p4b7;
 mod sotp031201_p5b5;
 mod sotp031201_p5b7;
+mod tc5175290;
 mod tcpp20003;
 mod tcpp20009;
 mod tcpp20011;
@@ -29,15 +30,16 @@ const ANDROID_GADGET: &str = "/sys/class/android_usb/android0";
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum ControllerModel {
     DGOC44U,
-    TCPP20003,
-    TCPP20009,
-    TCPP20011,
+    SLPH00051,
     SOTP031201P4B7,
     SOTP031201P4B2B7,
     SOTP031201P5B5,
     SOTP031201P5B7,
+    TC5175290,
+    TCPP20003,
+    TCPP20009,
+    TCPP20011,
     ZKNS001,
-    SLPH00051,
     GENERIC,
 }
 
@@ -87,6 +89,14 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
             &tcpp20003::DEVICE_DESCRIPTOR,
             &tcpp20003::DESCRIPTORS,
             &tcpp20003::STRINGS,
+        );
+    } else if state.button_down && state.power == 2 {
+        model_name = "TC-5175290";
+        model = ControllerModel::TC5175290;
+        descriptors = (
+            &tc5175290::DEVICE_DESCRIPTOR,
+            &tc5175290::DESCRIPTORS,
+            &tc5175290::STRINGS,
         );
     } else if state.button_d {
         model_name = "TCPP-20009";
@@ -159,6 +169,9 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
         ControllerModel::DGOC44U => {
             dgoc44u::update_gadget(state);
         }
+        ControllerModel::TC5175290 => {
+            tc5175290::update_gadget(state);
+        }
         ControllerModel::TCPP20003 => {
             tcpp20003::update_gadget(state);
         }
@@ -207,6 +220,9 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
             ControllerModel::SLPH00051 => {
                 report = Some(&slph00051::HID_REPORT_DESCRIPTOR);
             }
+            ControllerModel::TC5175290 => {
+                report = Some(&tc5175290::HID_REPORT_DESCRIPTOR);
+            }
             ControllerModel::TCPP20003 => {
                 report = Some(&tcpp20003::HID_REPORT_DESCRIPTOR);
             }
@@ -229,6 +245,9 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
         match model {
             ControllerModel::SLPH00051 => {
                 slph00051::handle_ctrl_transfer(data);
+            }
+            ControllerModel::TC5175290 => {
+                tc5175290::handle_ctrl_transfer(data);
             }
             ControllerModel::TCPP20003 => {
                 tcpp20003::handle_ctrl_transfer(data);
