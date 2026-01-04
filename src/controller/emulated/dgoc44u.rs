@@ -23,8 +23,8 @@ pub const DEVICE_DESCRIPTOR: DeviceDescriptor = DeviceDescriptor {
     id_product: 0x0003,
     bcd_device: 0x0102,
     i_manufacturer: "TAITO",
-    i_product: "Densha de Go! Plug & Play",
-    i_serial_number: "DGOC-44U",
+    i_product: "電車でGO! コントローラ USB版",
+    i_serial_number: "DGOC-44U_PNP",
 };
 
 pub const HID_REPORT_DESCRIPTOR: [u8; 63] = [

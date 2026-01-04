@@ -18,11 +18,11 @@ pub const STRINGS: [u8; 16] = [
 pub const DEVICE_DESCRIPTOR: DeviceDescriptor = DeviceDescriptor {
     b_device_class: 0x0,
     b_device_sub_class: 0x0,
-    id_vendor: 0x33DD,
-    id_product: 0x0001,
+    id_vendor: 0x0F0D,
+    id_product: 0x00C1,
     bcd_device: 0x0106,
     i_manufacturer: "TAITO",
-    i_product: "Densha de Go! Plug & Play (NS One Handle mode)",
+    i_product: "Densha de Go! Plug & Play (ZUIKI MasCon for Nintendo Switch mode)",
     i_serial_number: "ZKNS-001",
 };
 
