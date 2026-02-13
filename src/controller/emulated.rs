@@ -241,22 +241,6 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
             }
             None => (),
         }
-    } else {
-        match model {
-            ControllerModel::SLPH00051 => {
-                slph00051::handle_ctrl_transfer(data);
-            }
-            ControllerModel::TC5175290 => {
-                tc5175290::handle_ctrl_transfer(data);
-            }
-            ControllerModel::TCPP20003 => {
-                tcpp20003::handle_ctrl_transfer(data);
-            }
-            ControllerModel::GENERIC => {
-                generic::handle_ctrl_transfer(data);
-            }
-            _ => (),
-        }
     }
 }
 

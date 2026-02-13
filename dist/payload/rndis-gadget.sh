@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
-echo 0ae4 > "/sys/class/android_usb/android0/idVendor"
-echo 0003 > "/sys/class/android_usb/android0/idProduct"
+echo 1209 > "/sys/class/android_usb/android0/idVendor"
+echo d500 > "/sys/class/android_usb/android0/idProduct"
 echo -n "TAITO" > "/sys/class/android_usb/android0/iManufacturer"
 echo -n "Densha de Go! Plug & Play (RNDIS mode)" > "/sys/class/android_usb/android0/iProduct"
 echo "rndis" > "/sys/class/android_usb/android0/functions"
