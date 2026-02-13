@@ -17,6 +17,7 @@ mod sotp031201_p5b5;
 mod sotp031201_p5b7;
 mod tc5175290;
 mod tcpp20003;
+mod tcpp20004;
 mod tcpp20009;
 mod tcpp20011;
 mod zkns001;
@@ -37,6 +38,7 @@ pub enum ControllerModel {
     SOTP031201P5B7,
     TC5175290,
     TCPP20003,
+    TCPP20004,
     TCPP20009,
     TCPP20011,
     ZKNS001,
@@ -83,7 +85,7 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
             &slph00051::STRINGS,
         );
     } else if state.button_down && state.power == 1 {
-        model_name = "TCPP-20004";
+        model_name = "TCPP-20003";
         model = ControllerModel::TCPP20003;
         descriptors = (
             &tcpp20003::DEVICE_DESCRIPTOR,
@@ -97,6 +99,14 @@ pub fn set_model(state: &ControllerState) -> Option<ControllerModel> {
             &tc5175290::DEVICE_DESCRIPTOR,
             &tc5175290::DESCRIPTORS,
             &tc5175290::STRINGS,
+        );
+    } else if state.button_down && state.power == 3 {
+        model_name = "TCPP-20004";
+        model = ControllerModel::TCPP20004;
+        descriptors = (
+            &tcpp20004::DEVICE_DESCRIPTOR,
+            &tcpp20004::DESCRIPTORS,
+            &tcpp20004::STRINGS,
         );
     } else if state.button_d {
         model_name = "TCPP-20009";
@@ -175,6 +185,9 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
         ControllerModel::TCPP20003 => {
             tcpp20003::update_gadget(state);
         }
+        ControllerModel::TCPP20004 => {
+            tcpp20004::update_gadget(state);
+        }
         ControllerModel::TCPP20009 => {
             tcpp20009::update_gadget(state);
         }
@@ -225,6 +238,9 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
             }
             ControllerModel::TCPP20003 => {
                 report = Some(&tcpp20003::HID_REPORT_DESCRIPTOR);
+            }
+            ControllerModel::TCPP20004 => {
+                report = Some(&tcpp20004::HID_REPORT_DESCRIPTOR);
             }
             ControllerModel::GENERIC => {
                 report = Some(&generic::HID_REPORT_DESCRIPTOR);

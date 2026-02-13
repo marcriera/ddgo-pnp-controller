@@ -22,10 +22,10 @@ pub const DEVICE_DESCRIPTOR: DeviceDescriptor = DeviceDescriptor {
     b_device_sub_class: 0x0,
     id_vendor: 0x1209,
     id_product: 0xD500,
-    bcd_device: 0x0400,
+    bcd_device: 0x0500,
     i_manufacturer: "TAITO",
-    i_product: "Densha de Go! Plug & Play (N64 Two Handle mode)",
-    i_serial_number: "TCPP-20003",
+    i_product: "Densha de Go! Plug & Play (DC Two Handle mode)",
+    i_serial_number: "TCPP-20004",
 };
 
 pub const HID_REPORT_DESCRIPTOR: [u8; 51] = [

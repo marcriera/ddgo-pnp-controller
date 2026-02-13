@@ -37,8 +37,9 @@ Connect the Plug & Play to a PC or console using the data cable. Press one of th
 | One handle controller (Nintendo Switch) | UP                       | SELECT+START=HOME, SELECT+LEFT=L, SELECT+RIGHT=R |
 | Two handle controller (PC)              | RIGHT                    | D-Pad is mapped to SELECT+ABCD                   |
 | Two handle controller (PS1)             | DOWN + Power handle at 0 | Hold D to disable handles and enable D-Pad       |
-| Two handle controller (N64)             | DOWN + Power handle at 1 |                                                  |
-| Two handle controller (SAT)             | DOWN + Power handle at 2 |                                                  |
+| Two handle controller (Nintendo 64)     | DOWN + Power handle at 1 |                                                  |
+| Two handle controller (Sega Saturn)     | DOWN + Power handle at 2 |                                                  |
+| Two handle controller (Sega Dreamcast)  | DOWN + Power handle at 3 |                                                  |
 | Two handle controller "Type 2" (PS2)    | D                        |                                                  |
 | Shinkansen controller (PS2)             | B                        | Power notches are mapped to P2-P4-P7-P10-P13     |
 | Multi Train Controller (PS2) - P4/B7    | C + Power handle at 0    | SELECT+A=A2, SELECT+D=ATS, SELECT+D-Pad=Reverser |
@@ -55,7 +56,7 @@ If you need more information regarding each controller and supported software, p
 
 ### Nintendo 64
 
-Use mode *Two handle controller (N64)*. In the emulator's settings, assign the controller to **port 3**. The controller should map automatically. Make sure to enable the setting **Independent C-Buttons controls**. 
+Use mode *Two handle controller (Nintendo 64)*. In the emulator's settings, assign the controller to **port 3**. The controller should map automatically. Make sure to enable the setting **Independent C-Buttons controls**. 
 
 ### PlayStation
 
@@ -65,9 +66,13 @@ Use mode *Two handle controller (PS1)*. In the emulator's settings, configure a 
 
 Use mode *Generic Train Controller*. In the emulator's settings, configure a USB Densha de GO! controller and map the buttons/axes manually.
 
+### Sega Dreamcast
+
+Use mode *Two handle controller (Sega Dreamcast)*. In the emulator's settings, configure a **Densha de GO! controller**. The controller should map automatically.
+
 ### Sega Saturn
 
-Use mode *Two handle controller (SAT)*.The controller should map automatically.
+Use mode *Two handle controller (Sega Saturn)*. The controller should map automatically.
 
 ## RNDIS access (advanced users)
 
