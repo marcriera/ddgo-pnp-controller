@@ -52,7 +52,7 @@ pub const HID_REPORT_DESCRIPTOR: [u8; 51] = [
     0x75, 0x01, //   Report Size (1)
     0x95, 0x11, //   Report Count (17)
     0x81, 0x02, //   Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
-    0x95, 0x0E, //   Report Count (15)
+    0x95, 0x0F, //   Report Count (15)
     0x81, 0x01, //   Input (Const,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
     0xC0, // End Collection
 ];
