@@ -54,25 +54,59 @@ If you need more information regarding each controller and supported software, p
 
 ## Usage with emulators
 
-### Nintendo 64
+The mod can be used with certain emulators and compatible games. Instructions are provided per system.
 
-Use mode *Two handle controller (Nintendo 64)*. In the emulator's settings, assign the controller to **port 3**. The controller should map automatically. Make sure to enable the setting **Independent C-Buttons controls**. 
+### Nintendo 64 (RetroArch)
 
-### PlayStation
+1. Use mode *Two handle controller (Nintendo 64)*.
+2. In the emulator's settings, assign the controller to **port 3**. The controller should map automatically.
+3. Enable the setting **Independent C-Buttons controls** in the core's settings.
+4. Select the correct controller type in-game.
 
-Use mode *Two handle controller (PS1)*. In the emulator's settings, configure a regular analog/digital controller (**not a Densha de GO! controller**). The controller should map automatically. If the handles become unresponsive at some point., press **D**.
+### Nintendo Switch (any)
 
-### PlayStation 2
+1. Use mode *One handle controller (Nintendo Switch)*.
+2. In the emulator's settings, set the controller type to **Pro Controller**. The controller should map automatically.
+3. Select the correct controller type in-game.
 
-Use mode *Generic Train Controller*. In the emulator's settings, configure a USB Densha de GO! controller and map the buttons/axes manually.
+### Sega Dreamcast (Flycast)
 
-### Sega Dreamcast
+1. Use mode *Two handle controller (Sega Dreamcast)*.
+2. In the emulator's settings, set the controller type to **Densha de GO!**. The controller should map automatically.
 
-Use mode *Two handle controller (Sega Dreamcast)*. In the emulator's settings, configure a **Densha de GO! controller**. The controller should map automatically.
+### Sega Dreamcast (RetroArch)
 
-### Sega Saturn
+1. Use mode *Two handle controller (Sega Dreamcast)*.
+2. In the emulator's settings, set the controller type to **Densha de GO!**. The controller should map automatically.
 
-Use mode *Two handle controller (Sega Saturn)*. The controller should map automatically.
+### Sega Saturn (RetroArch)
+
+1. Use mode *Two handle controller (Sega Saturn)*. The controller should map automatically.
+2. Select the correct controller type in-game.
+
+### Sony PlayStation (DuckStation)
+
+1. Use mode *Two handle controller (PS1)*.
+2. Add the [SDL controller mappings](SDL_mappings.md) to your PC.
+3. In the emulator's settings, configure a regular digital controller (**not a Densha de GO! controller**). The controller should map automatically.
+4. If needed, hold **D** to temporarily disable the controller and enable the D-Pad for navigation.
+
+### Sony PlayStation (RetroArch)
+
+1. Use mode *Two handle controller (PS1)*.
+2. In the emulator's settings, configure a regular digital controller (**not a Densha de GO! controller**). The controller should map automatically.
+3. If needed, hold **D** to temporarily disable the controller and enable the D-Pad for navigation.
+
+### Sony PlayStation 2 (PCSX2)
+
+1. Use mode *Generic Train Controller*.
+2. In the emulator's settings, configure a USB Type 2 Train Controller. Map the buttons/axes manually.
+
+### Sony PlayStation 3 (RPCS3)
+
+1. Use mode *Two handle controller "Type 2" (PS2)*.
+2. Follow the OS-specific instructions in the [RPCS3 wiki](https://wiki.rpcs3.net/index.php?title=Help:Peripherals_and_accessories) to make sure the emulator can see the controller.
+3. No further configuration required, the emulator will communicate with the controller directly via USB.
 
 ## RNDIS access (advanced users)
 
