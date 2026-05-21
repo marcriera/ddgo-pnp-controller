@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::Write;
 
 use crate::controller::emulated::{DeviceDescriptor, ENDPOINT1};
-use crate::controller::physical::ControllerState;
+use crate::controller::physical::{ControllerState, set_lamp};
 use bitflags::bitflags;
 
 pub const DESCRIPTORS: [u8; 48] = [
@@ -114,5 +114,16 @@ pub fn update_gadget(state: &mut ControllerState) {
     let data = [0x1, state.reverser + handle, buttons1.bits, buttons2.bits];
     if let Ok(mut file) = File::create(ENDPOINT1) {
         file.write(&data).ok();
+    }
+}
+
+pub fn handle_ctrl_transfer(data: &[u8]) {
+    if data[1] == 0x50 {
+        if data[2] >= 0x10 {
+            set_lamp(true);
+        }
+        else {
+            set_lamp(false);
+        }
     }
 }

@@ -218,8 +218,8 @@ pub fn set_state(state: &mut ControllerState, model: &ControllerModel) {
     }
 }
 
-pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
-    println!("ddgo-pnp-controller: CTRL REQ: {:?}", data);
+pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8], data_buffer: &[u8]) {
+    // println!("ddgo-pnp-controller: CTRL REQ: {:?}", data);
     if data[1] == 6 && data[3] == 34 {
         // Get HID report descriptor
         let report: Option<&[u8]>;
@@ -258,6 +258,30 @@ pub fn handle_ctrl_transfer(model: ControllerModel, data: &[u8]) {
             None => (),
         }
     }
+    else {
+        match model {
+            ControllerModel::SOTP031201P4B2B7 => {
+                sotp031201_p4b2b7::handle_ctrl_transfer(data);
+            }
+            ControllerModel::SOTP031201P4B7 => {
+                sotp031201_p4b7::handle_ctrl_transfer(data);
+            }
+            ControllerModel::SOTP031201P5B5 => {
+                sotp031201_p5b5::handle_ctrl_transfer(data);
+            }
+            ControllerModel::SOTP031201P5B7 => {
+                sotp031201_p5b7::handle_ctrl_transfer(data);
+            }
+            ControllerModel::TCPP20009 => {
+                tcpp20009::handle_ctrl_transfer(data, data_buffer);
+            }
+            ControllerModel::TCPP20011 => {
+                tcpp20011::handle_ctrl_transfer(data, data_buffer);
+            }
+            _ => {
+            }
+        }
+    }
 }
 
 fn init_gadget(
@@ -288,13 +312,22 @@ fn init_gadget(
     thread::spawn(move || {
         if let Ok(mut ep0) = File::open(&ENDPOINT0) {
             let mut buffer = [0; 12];
+            let mut data_buffer = [0; 0xFFFF];
             loop {
                 if let Ok(_result) = ep0.read(&mut buffer) {
                     if buffer[8] == 0x4 {
                         // Control transfer received
-                        handle_ctrl_transfer(controller_model, &buffer[0..8]);
+                        let data_length = ((buffer[7] as u16) << 8) | buffer[6] as u16;
+                        if data_length > 0 {
+                            // Read additional data
+                            ep0.read(&mut data_buffer).ok();
+                        }
+                        handle_ctrl_transfer(controller_model, &buffer[0..8], &data_buffer);
                     }
                 }
+                // Clear buffer
+                buffer.fill(0);
+                data_buffer.fill(0);
                 // Wait between cycles
                 sleep(Duration::from_millis(10));
             }
