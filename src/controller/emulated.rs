@@ -23,10 +23,16 @@ mod tcpp20011;
 mod zkns001;
 mod generic;
 
+const CONFIGFS_MOUNT: &str = "/sys/kernel/config";
 const FFS_MOUNT: &str = "/tmp/ffs";
 const ENDPOINT0: &str = "/tmp/ffs/ep0";
 const ENDPOINT1: &str = "/tmp/ffs/ep1";
 const ANDROID_GADGET: &str = "/sys/class/android_usb/android0";
+const COMPOSITE_GADGET: &str = "/sys/kernel/config/usb_gadget/densha";
+const COMPOSITE_GADGET_STRINGS: &str = "/sys/kernel/config/usb_gadget/densha/strings/0x409";
+const COMPOSITE_GADGET_CONFIG: &str = "/sys/kernel/config/usb_gadget/densha/configs/c.1";
+const COMPOSITE_GADGET_CONFIG_STRINGS: &str = "/sys/kernel/config/usb_gadget/densha/configs/c.1/strings/0x409";
+const COMPOSITE_GADGET_FUNCTION: &str = "/sys/kernel/config/usb_gadget/densha/functions/ffs.usb0";
 
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum ControllerModel {
@@ -289,7 +295,7 @@ fn init_gadget(
     (device, descriptors, strings): (&DeviceDescriptor, &[u8], &[u8]),
 ) {
     // Init g_ffs kernel module
-    Command::new("modprobe")
+/*     Command::new("modprobe")
         .arg("g_ffs")
         .arg(String::from("bDeviceClass=") + &device.b_device_class.to_string())
         .arg(String::from("bDeviceSubClass=") + &device.b_device_sub_class.to_string())
@@ -305,7 +311,27 @@ fn init_gadget(
     Command::new("mount")
         .args(["-t", "functionfs", "ffs", &FFS_MOUNT])
         .output()
-        .ok();
+        .ok(); */
+
+    // Init composite gadget
+    Command::new("modprobe").arg("libcomposite").output().ok();
+    Command::new("mount").args(["none", &CONFIGFS_MOUNT, "-t", "configfs"]).output().ok();
+    Command::new("mkdir").args(["-p", &FFS_MOUNT]).output().ok();
+    Command::new("mkdir").args(["-p", &COMPOSITE_GADGET]).output().ok();
+    Command::new("mkdir").args(["-p", &COMPOSITE_GADGET_CONFIG]).output().ok();
+    Command::new("mkdir").args(["-p", &COMPOSITE_GADGET_FUNCTION]).output().ok();
+    Command::new("mkdir").args(["-p", &COMPOSITE_GADGET_STRINGS]).output().ok();
+    Command::new("mkdir").args(["-p", &COMPOSITE_GADGET_CONFIG_STRINGS]).output().ok();
+    fs::write(String::from(COMPOSITE_GADGET) + "/bDeviceClass", &device.b_device_class.to_string()).ok();
+    fs::write(String::from(COMPOSITE_GADGET) + "/bDeviceSubClass", &device.b_device_sub_class.to_string()).ok();
+    fs::write(String::from(COMPOSITE_GADGET) + "/idVendor", &device.id_vendor.to_string()).ok();
+    fs::write(String::from(COMPOSITE_GADGET) + "/idProduct", &device.id_product.to_string()).ok();
+    fs::write(String::from(COMPOSITE_GADGET) + "/bcdDevice", &device.bcd_device.to_string()).ok();
+    fs::write(String::from(COMPOSITE_GADGET_STRINGS) + "/manufacturer", &device.i_manufacturer.to_string()).ok();
+    fs::write(String::from(COMPOSITE_GADGET_STRINGS) + "/product", &device.i_product.to_string()).ok();
+    fs::write(String::from(COMPOSITE_GADGET_STRINGS) + "/serialnumber", &device.i_serial_number.to_string()).ok();
+    Command::new("mount").args(["usb0", &FFS_MOUNT, "-t", "functionfs"]).output().ok();
+    Command::new("ln").args(["-s", &COMPOSITE_GADGET_FUNCTION, &COMPOSITE_GADGET_CONFIG]).output().ok();
 
     let controller_model = model.clone();
 
@@ -339,6 +365,9 @@ fn init_gadget(
         ep0.write_all(strings).ok();
         println!("ddgo-pnp-controller: Strings written to EP0");
     }
+
+    // Start gadget
+    fs::write(String::from(COMPOSITE_GADGET) + "/UDC", "musb-hdrc.2.auto").ok();
 
     // Init Android Gadget for old 3.4 kernel
     let gadget = Path::new(&ANDROID_GADGET);
